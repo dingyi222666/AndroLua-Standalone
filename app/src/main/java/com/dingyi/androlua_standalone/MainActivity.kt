@@ -5,6 +5,7 @@ import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.widget.Toast
 import androidx.lifecycle.lifecycleScope
+import com.dingyi.androlua.vm.LuaGlobal
 import com.dingyi.androlua.vm.LuaVM
 import com.dingyi.androlua_standalone.R
 import kotlinx.coroutines.Dispatchers
@@ -43,6 +44,8 @@ class MainActivity : AppCompatActivity(), LuaVM.VMMessageListener {
                         }
                 }
             }
+
+
 
             //create lua vm
             val luaVM = LuaVM(assetsPath)
