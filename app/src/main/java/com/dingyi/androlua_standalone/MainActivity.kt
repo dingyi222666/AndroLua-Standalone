@@ -20,7 +20,7 @@ class MainActivity : AppCompatActivity(), LuaVM.VMMessageListener {
 
 
         //Un Assets File
-        val assetsPath = filesDir.absolutePath
+        val assetsPath = getExternalFilesDir("test")?.parentFile?.absolutePath.toString()
 
         // get apk path
         val apkPath = this.packageResourcePath

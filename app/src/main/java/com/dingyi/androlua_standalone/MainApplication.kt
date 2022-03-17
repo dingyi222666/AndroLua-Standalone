@@ -12,6 +12,8 @@ class MainApplication: Application() {
             .init(this)
 
 
+        CrashHandler
+            .init(this)
     }
 
 

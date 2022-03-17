@@ -1,5 +1,6 @@
-package com.dingyi.myluaapp
+package com.dingyi.androlua_standalone
 
+import android.annotation.SuppressLint
 import android.content.Context
 import android.content.pm.PackageManager
 import android.os.Build
@@ -144,6 +145,7 @@ object CrashHandler
      * @param ex
      * @return 返回文件名称,便于将文件传送到服务器
      */
+    @SuppressLint("SdCardPath")
     private fun saveCrashInfo2File(ex: Throwable): String? {
         val sb = StringBuffer()
         for ((key, value) in infos) {
@@ -165,7 +167,7 @@ object CrashHandler
             val time = formatter.format(Date())
             val fileName = "crash-$time-$timestamp.log"
             if (Environment.getExternalStorageState() == Environment.MEDIA_MOUNTED) {
-                val path = "/sdcard/android/data/com.dingyi.androlua_standalone/files/crash/"
+                val path = "/sdcard/Android/data/com.dingyi.androlua_standalone/files/crash/"
                 val dir = File(path)
                 if (!dir.exists()) dir.mkdirs()
                 val fos = FileOutputStream(path + fileName)
