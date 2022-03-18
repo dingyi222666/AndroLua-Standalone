@@ -11,7 +11,7 @@
 1.接入androlua-standlone到当前模块
 
 ```groovy
-
+implementation "io.github.dingyi222666:androlua-standlone:1.0.0"
 ```
 
 2. 在项目的Application的onCreate方法里初始化LuaGlobal
