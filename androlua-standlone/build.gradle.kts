@@ -12,7 +12,7 @@ plugins {
 ext {
     set("PUBLISH_GROUP_ID", "io.github.dingyi222666")
     set("PUBLISH_ARTIFACT_ID", "androlua-standlone")
-    set("PUBLISH_VERSION", "1.0.1")
+    set("PUBLISH_VERSION", "1.0.2")
     extra["signing.keyId"] = ""
     extra["signing.password"] = ""
     extra["signing.secretKeyRingFile"] = ""
