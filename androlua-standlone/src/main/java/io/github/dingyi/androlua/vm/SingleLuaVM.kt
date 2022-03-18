@@ -137,6 +137,12 @@ class SingleLuaVM(
 
     override fun init() {
         super.init()
+        luaState.openBase()
+        luaState.openDebug()
+        luaState.openLibs()
+        luaState.openLuajava()
+        luaState.openPackage()
+
 
         luaState.pushContext(this)
 
