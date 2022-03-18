@@ -1,7 +1,7 @@
-package com.dingyi.androlua_standalone
+package io.dingyi.androlua_standalone
 
 import android.app.Application
-import com.github.dingyi.androlua.vm.LuaGlobal
+import io.github.dingyi.androlua.vm.LuaGlobal
 
 class MainApplication: Application() {
 
@@ -12,8 +12,7 @@ class MainApplication: Application() {
             .init(this)
 
 
-        CrashHandler
-            .init(this)
+        CrashHandler.init(this)
     }
 
 

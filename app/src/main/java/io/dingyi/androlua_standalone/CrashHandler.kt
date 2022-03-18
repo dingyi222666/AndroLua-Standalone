@@ -1,4 +1,4 @@
-package com.dingyi.androlua_standalone
+package io.dingyi.androlua_standalone
 
 import android.annotation.SuppressLint
 import android.content.Context

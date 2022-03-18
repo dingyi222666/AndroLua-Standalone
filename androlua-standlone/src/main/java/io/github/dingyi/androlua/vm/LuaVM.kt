@@ -1,8 +1,8 @@
-package com.github.dingyi.androlua.vm
+package io.github.dingyi.androlua.vm
 
 import android.app.Activity
 import com.androlua.LuaGcable
-import com.github.dingyi.androlua.lib.func.LuaPrint
+import io.github.dingyi.androlua.lib.func.LuaPrint
 import com.luajava.LuaException
 import com.luajava.LuaState
 import com.luajava.LuaStateFactory

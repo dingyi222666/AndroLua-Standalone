@@ -4,14 +4,14 @@
 
     <application
         android:allowBackup="true"
-        android:name=".MainApplication"
+        android:name="io.dingyi.androlua_standalone.MainApplication"
         android:icon="@mipmap/ic_launcher"
         android:label="@string/app_name"
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
         android:theme="@style/Theme.AndroLuaStandalone">
         <activity
-            android:name=".MainActivity"
+            android:name="io.dingyi.androlua_standalone.MainActivity"
             android:exported="true">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />

@@ -1,10 +1,11 @@
-package com.dingyi.androlua_standalone
+package io.dingyi.androlua_standalone
 
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.widget.Toast
 import androidx.lifecycle.lifecycleScope
-import com.github.dingyi.androlua.vm.LuaVM
+import com.dingyi.androlua_standalone.R
+import io.github.dingyi.androlua.vm.LuaVM
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
