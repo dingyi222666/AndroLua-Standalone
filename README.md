@@ -10,13 +10,13 @@
 
 ### 使用方式
 
-> 1.首先接入androlua-standlone到当前项目
+> 首先接入androlua-standlone到当前项目
 
 ```groovy
 implementation "io.github.dingyi222666:androlua-standlone:1.0.1"
 ```
 
-> 2. 在项目的Application的onCreate方法里初始化LuaGlobal
+> 在项目的Application的onCreate方法里初始化LuaGlobal
 
 ```kotlin
 //kotlin
@@ -29,13 +29,13 @@ LuaGlobal.init(this)
 
 SingleLuaVM 是简单低耦合的运行单个lua虚拟机的类，无需为虚拟机设置lua运行路径以及lua目录即可运行lua代码
 
-> 1.创建类
+> 创建类
 
 ```kotlin
 val vm = SingleLuaVM()
 ```
 
-> 2.运行代码
+> 运行代码
 
 ```kotlin
 
