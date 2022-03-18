@@ -6,7 +6,7 @@ plugins {
 ext {
     PUBLISH_GROUP_ID = "io.github.dingyi222666"
     PUBLISH_ARTIFACT_ID = 'androlua-standlone'
-    PUBLISH_VERSION = '1.0.0'
+    PUBLISH_VERSION = '1.0.1'
 }
 
 apply from: "publish.gradle"
