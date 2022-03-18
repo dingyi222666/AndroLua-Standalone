@@ -5,6 +5,7 @@ import android.content.Context
 import android.content.SharedPreferences
 import android.os.Build
 import android.preference.PreferenceManager
+import com.androlua.LuaGcable
 import com.luajava.LuaException
 import com.luajava.LuaState
 import com.luajava.LuaTable
@@ -23,6 +24,11 @@ object LuaGlobal : LuaContext {
     fun init(application: Application) {
         globalContext = application
         mSharedPreferences = getSharedPreferences(applicationContext)
+
+        luaCpath = application.getDir(
+            "lib",
+            Context.MODE_PRIVATE
+        ).absolutePath + application.applicationInfo.nativeLibraryDir + "/lib?.so" + ";" + "/lib?.so"
     }
 
 
@@ -30,6 +36,9 @@ object LuaGlobal : LuaContext {
         get() = globalContext
 
     override fun call(func: String, vararg args: Any?) {}
+    override fun runFunc(func: String, vararg args: Any?): Any {
+        TODO("Not yet implemented")
+    }
 
     override fun set(name: String?, value: Any?) {}
 
@@ -37,7 +46,14 @@ object LuaGlobal : LuaContext {
         return null
     }
 
+
+
+
     override fun getLuaPath(path: String): String? {
+        return null
+    }
+
+    override fun getLuaPath(p0: String?, p1: String?): String? {
         return null
     }
 
@@ -98,6 +114,10 @@ object LuaGlobal : LuaContext {
 
     override fun getLuaState(): LuaState? {
         return null
+    }
+
+    override fun getSharedData(): Any {
+        return mSharedPreferences.all
     }
 
     override fun doFile(path: String, vararg arg: Any?): Any? {

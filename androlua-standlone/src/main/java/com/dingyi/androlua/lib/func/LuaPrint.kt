@@ -1,16 +1,16 @@
 package com.dingyi.androlua.lib.func
 
-import com.android.cglib.dx.a.b.L
+
 import com.dingyi.androlua.vm.LuaContext
 import com.luajava.JavaFunction
 
 
 class LuaPrint(
     private val luaContext: LuaContext
-) : JavaFunction(luaContext.getLuaState()) {
+) : JavaFunction(luaContext.luaState) {
 
 
-    private val luaState = checkNotNull(luaContext.getLuaState())
+    private val luaState = checkNotNull(luaContext.luaState)
 
     private val output = StringBuilder()
 
@@ -22,7 +22,7 @@ class LuaPrint(
         for (i in 2..luaState.top) {
             val contentType = luaState.type(i)
             var valStringContext:String? = null
-            val contentTypeName = luaState.typeName(i)
+            val contentTypeName = luaState.typeName(contentType)
             valStringContext = if (contentTypeName == "userdata") {
                 val obj = luaState.toJavaObject(i)
                 obj?.toString()

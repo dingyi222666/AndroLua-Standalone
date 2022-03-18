@@ -1,7 +1,7 @@
 package com.dingyi.androlua.vm
 
 import android.app.Activity
-import com.android.cglib.dx.a.b.L
+import com.androlua.LuaGcable
 import com.dingyi.androlua.lib.func.LuaPrint
 import com.luajava.JavaFunction
 import com.luajava.LuaException
@@ -36,6 +36,7 @@ class LuaVM(
     override fun getLuaPath(path: String): String? {
         return File(getLuaPath(), path).absolutePath
     }
+
 
 
     override fun getLuaDir(): String? {
@@ -85,23 +86,22 @@ class LuaVM(
     }
 
     override fun doFile(path: String, vararg args: Any?): Any? {
-        loadLuaPath = path
         var loadPath = path
         var ok = 0
 
         if (path[0] !== '/') loadPath = getLuaDir().toString() + "/" + path
         luaState.top = 0
+        loadLuaPath = loadPath
         ok = luaState.LloadFile(loadPath)
         if (ok == 0) {
             luaState.getGlobal("debug")
             luaState.getField(-1, "traceback")
             luaState.remove(-2)
             luaState.insert(-2)
-            val l: Int = args.size
-            for (i in 0 until l) {
-                luaState.pushObjectValue(args[i])
+            for (element in args) {
+                luaState.pushObjectValue(element)
             }
-            ok = luaState.pcall(l, 1, -2 - l)
+            ok = luaState.pcall(args.size, 1, -2 - args.size)
             if (ok == 0) {
                 return luaState.toJavaObject(-1)
             }
@@ -118,25 +118,54 @@ class LuaVM(
         gcList.add(obj)
     }
 
-    fun init(activity: Activity?,runLuaPath:String) {
+    fun init() {
+
+        luaState.openBase()
+        luaState.openDebug()
+        luaState.openLibs()
+        luaState.openLuajava()
+        luaState.openPackage()
+
+        luaState.pushContext(this)
+
+        val print = LuaPrint(this)
+        print.register("print")
+
+    }
+
+    fun init(activity: Activity?, runLuaPath: String) {
+
+        luaState.openBase()
+        luaState.openDebug()
+        luaState.openLibs()
+        luaState.openLuajava()
+        luaState.openPackage()
+
         loadLuaPath = runLuaPath
-        if (activity!=null) {
+        if (activity != null) {
 
             luaState.pushJavaObject(activity);
             luaState.setGlobal("activity");
             luaState.getGlobal("activity");
             luaState.setGlobal("this");
 
-            luaState.pushString("_LuaContext");
-            luaState.pushJavaObject(this);
-            luaState.setTable(-1001000);
+
         }
+        luaState.pushContext(this)
+
         luaState.getGlobal("luajava");
-        luaState.pushString(getLuaExtDir());
-        luaState.setField(-2, "luaextdir");
-        luaState.pushString(getLuaDir());
-        luaState.setField(-2, "luadir");
-        luaState.pushString(getLuaPath());
+
+        getLuaExtDir()?.let { luaExtDir ->
+            luaState.pushString(luaExtDir);
+            luaState.setField(-2, "luaextdir");
+        }
+
+        getLuaDir()?.let {
+            luaState.pushString(it);
+            luaState.setField(-2, "luadir");
+        }
+
+        luaState.pushString(luaPath);
         luaState.setField(-2, "luapath");
         luaState.pop(1);
 
@@ -144,11 +173,11 @@ class LuaVM(
         print.register("print")
 
 
-        doFile(getLuaPath().toString())
+        doFile(luaPath.toString())
     }
 
 
-    override fun call(func: String, vararg args: Any?): Any? {
+    override fun runFunc(func: String, vararg args: Any?): Any? {
         synchronized(luaState) {
             try {
                 luaState.top = 0

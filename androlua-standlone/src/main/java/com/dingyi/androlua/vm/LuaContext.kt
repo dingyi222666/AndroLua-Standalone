@@ -1,48 +1,31 @@
 package com.dingyi.androlua.vm
 
 import android.content.Context
+import com.androlua.LuaGcable
 import com.luajava.LuaState
+import java.util.ArrayList
 
 
 /**
  * Lua的Context对象
  */
-interface LuaContext {
+interface LuaContext : com.androlua.LuaContext {
 
     /**
      * 获取类加载器
      */
-    fun getClassLoaders(): List<ClassLoader>? = null
+    override fun getClassLoaders(): ArrayList<ClassLoader>? = null
 
     /**
      * 调用指定函数
      */
-    fun call(func: String, vararg args: Any?) : Any?
+    override fun call(func: String, vararg args: Any?) {
+        runFunc(func, args)
+    }
 
-    operator fun set(name: String?, value: Any?)
+    fun runFunc(func: String, vararg args: Any?): Any?
 
-    fun getLuaPath(): String?
-
-    fun getLuaPath(path: String): String?
-
-
-    fun getLuaDir(): String?
-
-    fun getLuaDir(dir: String?): String?
-
-    fun getLuaExtDir(): String?
-
-    fun getLuaExtDir(dir: String?): String?
-
-    fun setLuaExtDir(dir: String?)
-
-    fun getLuaExtPath(path: String?): String?
-
-    fun getLuaExtPath(dir: String?, name: String?): String?
-
-    fun getLuaLpath(): String
-
-    fun getLuaCpath(): String
+    override fun set(name: String?, value: Any?)
 
 
     fun setLuaLpath(path: String)
@@ -50,15 +33,10 @@ interface LuaContext {
     fun setLuaCpath(path: String)
 
 
-    fun getContext(): Context
-
-    fun getLuaState(): LuaState?
-
-    fun doFile(path: String, vararg arg: Any?): Any?
-
-    fun doFile(path: String) {
-        doFile(path, null)
+    fun doFile(p0: String?): Any {
+        return doFile(p0, null)
     }
+
 
     //生成错误信息
     fun getErrorReason(error: Int): String {
@@ -74,20 +52,13 @@ interface LuaContext {
     }
 
 
-    fun sendMsg(msg: String)
+    override fun regGc(p0: com.androlua.LuaGcable) {
+        registerGcable(p0)
+    }
 
-    fun sendError(title: String, msg: Exception)
-
-    fun getWidth(): Int
-
-    fun getHeight(): Int
-
-
-    fun getSharedData(key: String?): Any?
-
-    fun getSharedData(key: String?, def: Any?): Any?
-
-    fun setSharedData(key: String?, value: Any?): Boolean
+    override fun getGlobalData(): MutableMap<Any?, Any?> {
+        return mutableMapOf()
+    }
 
     /**
      * 注册gc对象

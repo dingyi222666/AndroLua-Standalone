@@ -50,23 +50,13 @@ class MainActivity : AppCompatActivity(), LuaVM.VMMessageListener {
             //create lua vm
             val luaVM = LuaVM(assetsPath)
 
-            //set base path
-            luaVM.apply {
-
-                setLuaCpath(
-                    getDir("lib", Context.MODE_PRIVATE).absolutePath
-                            + applicationInfo.nativeLibraryDir + "/lib?.so" + ";" + "/lib?.so"
-                )
-
-            }
-
-
             luaVM
                 .registerMessageListener(this@MainActivity)
 
+
             //run main.lua
             luaVM
-                .init(this@MainActivity, "main.lua")
+                .init(this@MainActivity, "$assetsPath/main.lua")
 
 
         }
