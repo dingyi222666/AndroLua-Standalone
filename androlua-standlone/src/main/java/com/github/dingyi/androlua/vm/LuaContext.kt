@@ -1,4 +1,4 @@
-package com.dingyi.androlua.vm
+package com.github.dingyi.androlua.vm
 
 import android.content.Context
 import com.androlua.LuaGcable

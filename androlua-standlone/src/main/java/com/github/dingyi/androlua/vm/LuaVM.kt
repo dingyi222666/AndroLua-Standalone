@@ -1,9 +1,8 @@
-package com.dingyi.androlua.vm
+package com.github.dingyi.androlua.vm
 
 import android.app.Activity
 import com.androlua.LuaGcable
-import com.dingyi.androlua.lib.func.LuaPrint
-import com.luajava.JavaFunction
+import com.github.dingyi.androlua.lib.func.LuaPrint
 import com.luajava.LuaException
 import com.luajava.LuaState
 import com.luajava.LuaStateFactory
@@ -34,7 +33,7 @@ class LuaVM(
 
 
     override fun getLuaPath(path: String): String? {
-        return File(getLuaPath(), path).absolutePath
+        return File(luaPath, path).absolutePath
     }
 
 

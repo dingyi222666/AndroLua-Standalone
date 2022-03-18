@@ -1,13 +1,10 @@
 package com.dingyi.androlua_standalone
 
-import android.content.Context
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.widget.Toast
 import androidx.lifecycle.lifecycleScope
-import com.dingyi.androlua.vm.LuaGlobal
-import com.dingyi.androlua.vm.LuaVM
-import com.dingyi.androlua_standalone.R
+import com.github.dingyi.androlua.vm.LuaVM
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
@@ -44,7 +41,6 @@ class MainActivity : AppCompatActivity(), LuaVM.VMMessageListener {
                         }
                 }
             }
-
 
 
             //create lua vm

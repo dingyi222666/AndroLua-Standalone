@@ -1,4 +1,4 @@
-package com.dingyi.androlua.vm
+package com.github.dingyi.androlua.vm
 
 import android.app.Application
 import android.content.Context

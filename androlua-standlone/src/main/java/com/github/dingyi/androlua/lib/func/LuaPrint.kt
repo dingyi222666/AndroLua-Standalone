@@ -1,7 +1,7 @@
-package com.dingyi.androlua.lib.func
+package com.github.dingyi.androlua.lib.func
 
 
-import com.dingyi.androlua.vm.LuaContext
+import com.github.dingyi.androlua.vm.LuaContext
 import com.luajava.JavaFunction
 
 

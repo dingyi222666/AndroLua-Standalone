@@ -1,7 +1,7 @@
 package com.dingyi.androlua_standalone
 
 import android.app.Application
-import com.dingyi.androlua.vm.LuaGlobal
+import com.github.dingyi.androlua.vm.LuaGlobal
 
 class MainApplication: Application() {
 
