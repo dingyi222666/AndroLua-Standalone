@@ -9,11 +9,19 @@ import com.androlua.LuaGcable
 import com.luajava.LuaException
 import com.luajava.LuaState
 import com.luajava.LuaTable
+import io.github.dingyi.androlua.loader.LuaDexLoader
 import java.io.File
 
 
-object LuaGlobal : LuaContext {
+object LuaGlobal : LuaVM {
 
+
+    lateinit var libDir: String
+        private set
+    lateinit var odexDir: String
+        private set
+    lateinit var luaMdDir: String
+        private set
     private var luaCPath: String? = null
     private var luaLPath: String? = null
     private var luaExtDir: String? = null
@@ -25,6 +33,10 @@ object LuaGlobal : LuaContext {
         globalContext = application
         mSharedPreferences = getSharedPreferences(applicationContext)
 
+        odexDir = application.getDir("odex", Context.MODE_PRIVATE).getAbsolutePath();
+        libDir = application.getDir("lib", Context.MODE_PRIVATE).getAbsolutePath();
+        luaMdDir = application.getDir("lua", Context.MODE_PRIVATE).getAbsolutePath();
+
         luaCpath = application.getDir(
             "lib",
             Context.MODE_PRIVATE
@@ -35,9 +47,21 @@ object LuaGlobal : LuaContext {
     val applicationContext: Application
         get() = globalContext
 
+
+    override fun init() {
+        //
+    }
+
+
+
+    override fun doString(code: String, vararg args: Any?): Any? {
+        return null
+    }
+
+
     override fun call(func: String, vararg args: Any?) {}
-    override fun runFunc(func: String, vararg args: Any?): Any {
-        TODO("Not yet implemented")
+    override fun runFunc(func: String, vararg args: Any?): Any? {
+        return null
     }
 
     override fun set(name: String?, value: Any?) {}
@@ -45,7 +69,6 @@ object LuaGlobal : LuaContext {
     override fun getLuaPath(): String? {
         return null
     }
-
 
 
 
@@ -164,6 +187,10 @@ object LuaGlobal : LuaContext {
     }
 
     override fun registerGcable(obj: LuaGcable) {}
+
+    override fun getLuaDexLoader(): LuaDexLoader? {
+        return null
+    }
 
     private fun getSharedPreferences(context: Context): SharedPreferences {
         return if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.N) {

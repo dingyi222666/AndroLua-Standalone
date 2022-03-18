@@ -3,10 +3,11 @@ package io.github.dingyi.androlua.lib.func
 
 import io.github.dingyi.androlua.vm.LuaContext
 import com.luajava.JavaFunction
+import io.github.dingyi.androlua.vm.LuaVM
 
 
 class LuaPrint(
-    private val luaContext: LuaContext
+    private val luaContext: LuaVM
 ) : JavaFunction(luaContext.luaState) {
 
 

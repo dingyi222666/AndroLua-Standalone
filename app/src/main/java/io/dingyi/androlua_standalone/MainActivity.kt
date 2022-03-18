@@ -5,13 +5,15 @@ import android.os.Bundle
 import android.widget.Toast
 import androidx.lifecycle.lifecycleScope
 import com.dingyi.androlua_standalone.R
+import io.github.dingyi.androlua.vm.LuaActivityVM
 import io.github.dingyi.androlua.vm.LuaVM
+import io.github.dingyi.androlua.vm.SingleLuaVM
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
 import net.lingala.zip4j.ZipFile
 
-class MainActivity : AppCompatActivity(), LuaVM.VMMessageListener {
+class MainActivity : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
@@ -44,31 +46,22 @@ class MainActivity : AppCompatActivity(), LuaVM.VMMessageListener {
             }
 
 
-            //create lua vm
-            val luaVM = LuaVM(assetsPath)
+            val luaVM = SingleLuaVM()
+
+            luaVM.init()
 
             luaVM
-                .registerMessageListener(this@MainActivity)
+                .set("javaObject", this@MainActivity)
 
 
-            //run main.lua
-            luaVM
-                .init(this@MainActivity, "$assetsPath/main.lua")
-
-
+            luaVM.doString("javaObject.print 'hello lua'")
         }
     }
 
-    override fun onShowMessage(msg: String) {
-        Toast
-            .makeText(
-                this, msg, Toast
-                    .LENGTH_LONG
-            )
+    fun print(msg: String) {
+        Toast.makeText(this, msg, Toast.LENGTH_LONG)
             .show()
     }
 
-    override fun onShowErrorMessage(title: String, exception: Exception) {
 
-    }
 }
