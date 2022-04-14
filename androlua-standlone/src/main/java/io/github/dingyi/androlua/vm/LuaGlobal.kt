@@ -53,6 +53,9 @@ object LuaGlobal : LuaVM {
     }
 
 
+    override fun get(name: String): Any? {
+        return null
+    }
 
     override fun doString(code: String, vararg args: Any?): Any? {
         return null
@@ -64,7 +67,7 @@ object LuaGlobal : LuaVM {
         return null
     }
 
-    override fun set(name: String?, value: Any?) {}
+    override fun set(name: String, value: Any?) {}
 
     override fun getLuaPath(): String? {
         return null

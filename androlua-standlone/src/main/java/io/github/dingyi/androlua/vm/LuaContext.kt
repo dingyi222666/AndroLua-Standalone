@@ -23,9 +23,17 @@ interface LuaContext : com.androlua.LuaContext {
         runFunc(func, args)
     }
 
+    /**
+     * 获取全局表里面对应名字的值，如果不存在返回null
+     */
+    fun get(name: String):Any?
+
     fun runFunc(func: String, vararg args: Any?): Any?
 
-    override fun set(name: String?, value: Any?)
+    /**
+     * 设置全局函数里的name为对于的值
+     */
+    override fun set(name: String, value: Any?)
 
 
     fun setLuaLpath(path: String)

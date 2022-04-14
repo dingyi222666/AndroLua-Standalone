@@ -117,7 +117,7 @@ class LuaDexLoader(context: LuaContext) {
     }
 
     init {
-        val app = LuaApplication.getInstance()
+        val app = LuaGlobal
         //localDir = app.getLocalDir();
         odexDir = app.odexDir
     }

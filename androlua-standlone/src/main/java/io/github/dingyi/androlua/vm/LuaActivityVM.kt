@@ -40,7 +40,7 @@ class LuaActivityVM(
 
 
     override fun getLuaPath(path: String): String? {
-        return File(luaPath, path).absolutePath
+        return File(getLuaPath(), path).absolutePath
     }
 
 
@@ -144,7 +144,15 @@ class LuaActivityVM(
 
     }
 
-    override fun set(name: String?, value: Any?) {
+
+    override fun get(key: String): Any? {
+        synchronized(luaState) {
+            luaState.getGlobal(key)
+            return luaState.toJavaObject(-1)
+        }
+    }
+
+    override fun set(name: String, value: Any?) {
         synchronized(luaState) {
             try {
                 luaState.pushObjectValue(value);
@@ -168,18 +176,16 @@ class LuaActivityVM(
 
             luaState.pushJavaObject(activity);
             luaState.setGlobal("activity");
-
+            luaState.getGlobal("activity");
             luaState.setGlobal("this");
-            luaState.getGlobal("this");
 
 
             initActivity = WeakReference(activity)
 
         }
         luaState.pushContext(this)
-        luaState.pushJavaObject(this)
-        luaState.setGlobal("luaContext");
         luaState.getGlobal("luajava");
+
 
         getLuaExtDir()?.let { luaExtDir ->
             luaState.pushString(luaExtDir);
@@ -191,12 +197,10 @@ class LuaActivityVM(
             luaState.setField(-2, "luadir");
         }
 
-        luaState.pushString(luaPath);
+        luaState.pushString(getLuaPath());
         luaState.setField(-2, "luapath");
         luaState.pop(1);
 
-        val print = LuaPrint(this)
-        print.register("print")
 
 
         registerMessageListener(this)
@@ -206,7 +210,11 @@ class LuaActivityVM(
         // load lib dex
         luaDexLoader.loadLibs()
 
-        doFile(luaPath.toString())
+
+        val print = LuaPrint(this)
+        print.register("print")
+
+        doFile(getLuaPath().toString())
     }
 
 
@@ -234,24 +242,21 @@ class LuaActivityVM(
                 }
             } catch (e: LuaException) {
                 sendError(func, e)
-
             }
         }
         return null
     }
 
     override fun onShowMessage(msg: String) {
-        initActivity
-            .get()
-            ?.let { activity ->
-                Toast
-                    .makeText(activity, msg, Toast.LENGTH_LONG)
-                    .show()
-            }
+        Toast.makeText(LuaGlobal.applicationContext, msg, Toast.LENGTH_SHORT).show()
     }
 
     override fun onShowErrorMessage(title: String, exception: Exception) {
-
+        Toast.makeText(
+            LuaGlobal.applicationContext,
+            exception.stackTraceToString(),
+            Toast.LENGTH_SHORT
+        ).show()
     }
 
     override fun destroy() {

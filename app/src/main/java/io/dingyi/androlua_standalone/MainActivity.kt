@@ -1,19 +1,18 @@
 package io.dingyi.androlua_standalone
 
-import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
-import android.widget.Toast
 import androidx.lifecycle.lifecycleScope
 import com.dingyi.androlua_standalone.R
-import io.github.dingyi.androlua.vm.LuaActivityVM
-import io.github.dingyi.androlua.vm.LuaVM
-import io.github.dingyi.androlua.vm.SingleLuaVM
+import io.github.dingyi.androlua.lib.activity.ProxyLuaActivity
+import io.github.dingyi.androlua.vm.LuaGlobal
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
 import net.lingala.zip4j.ZipFile
 
-class MainActivity : AppCompatActivity() {
+class MainActivity : ProxyLuaActivity(
+    luaDir = LuaGlobal.applicationContext.getExternalFilesDir("test")?.parentFile?.absolutePath.toString()
+) {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
@@ -46,21 +45,17 @@ class MainActivity : AppCompatActivity() {
             }
 
 
-            val luaVM = SingleLuaVM()
+            val func1  = requireLuaVM()
+                .get("print")
 
-            luaVM.init()
+            val func2 = requireLuaVM()
+                .get("onCreate")
 
-            luaVM
-                .set("javaObject", this@MainActivity)
+            println(func1)
+            println(func2)
 
-
-            luaVM.doString("javaObject.print 'hello lua'")
         }
-    }
 
-    fun print(msg: String) {
-        Toast.makeText(this, msg, Toast.LENGTH_LONG)
-            .show()
     }
 
 

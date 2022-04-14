@@ -11,6 +11,7 @@ class LuaPrint(
 ) : JavaFunction(luaContext.luaState) {
 
 
+
     private val luaState = checkNotNull(luaContext.luaState)
 
     private val output = StringBuilder()

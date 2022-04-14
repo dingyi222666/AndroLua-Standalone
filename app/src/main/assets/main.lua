@@ -5,5 +5,31 @@
 ---
 
 
-print("Hello AndroLua-Standalone")
+local Log = luajava.bindClass "android.util.Log"
+
+function print(...)
+    local buf = {}
+    for n = 1, select("#", ...) do
+        table.insert(buf, tostring(select(n, ...)))
+    end
+    local msg = table.concat(buf, "\t\t")
+    Log.d("lua",tostring(luajava.getContext()))
+    luajava.getContext().sendMsg(msg)
+end
+
+function onCreate()
+    Log.d("lua","onCreate")
+    print("onCreate")
+end
+
+function onDestroy()
+    Log.d("lua","onDestroy")
+    print("onDestroy")
+end
+
+function onResume()
+    Log.d("lua","onResume")
+    print("onResume")
+end
+
 

@@ -9,10 +9,10 @@ plugins {
 
 
 
-ext {
+extra.apply {
     set("PUBLISH_GROUP_ID", "io.github.dingyi222666")
     set("PUBLISH_ARTIFACT_ID", "androlua-standlone")
-    set("PUBLISH_VERSION", "1.0.2")
+    set("PUBLISH_VERSION", "1.0.3")
     extra["signing.keyId"] = ""
     extra["signing.password"] = ""
     extra["signing.secretKeyRingFile"] = ""
@@ -27,7 +27,7 @@ if (secretPropsFile.exists()) {
     val p = Properties()
     p.load(secretPropsFile.inputStream())
     p.forEach { name, value ->
-        ext[name.toString()] = value
+        extra[name.toString()] = value
     }
 } else {
     println("No props file, loading env vars")

@@ -4,7 +4,6 @@ import com.luajava.LuaException
 import com.luajava.LuaState
 import com.luajava.LuaStateFactory
 import io.github.dingyi.androlua.lib.func.LuaPrint
-import io.github.dingyi.androlua.loader.LuaDexLoader
 import java.io.File
 
 /**
@@ -36,6 +35,14 @@ class SingleLuaVM(
         return File(luaPath, path).absolutePath
     }
 
+
+
+    override fun get(key: String): Any? {
+        synchronized(luaState) {
+            luaState.getGlobal(key)
+            return luaState.toJavaObject(-1)
+        }
+    }
 
     override fun getLuaDir(): String? {
         return LuaGlobal.getLuaDir()
@@ -166,7 +173,7 @@ class SingleLuaVM(
         print.register("print")
     }
 
-    override fun set(name: String?, value: Any?) {
+    override fun set(name: String, value: Any?) {
         synchronized(luaState) {
             try {
                 luaState.pushObjectValue(value);

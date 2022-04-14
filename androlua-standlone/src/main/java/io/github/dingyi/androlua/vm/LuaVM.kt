@@ -41,10 +41,16 @@ interface LuaVM : LuaContext {
         messageListener.remove(vmMessageListener)
     }
 
+    /**
+     * 向vm发送一条消息
+     */
     override fun sendMsg(msg: String) {
         messageListener.forEach { it.onShowMessage(msg) }
     }
 
+    /**
+     * 向vm发送一条错误消息
+     */
     override fun sendError(title: String, msg: Exception) {
         messageListener.forEach { it.onShowErrorMessage(title, msg) }
         throw msg
@@ -58,6 +64,9 @@ interface LuaVM : LuaContext {
     private val gcList: MutableList<LuaGcable>
         get() = mutableListOf()
 
+    /**
+     * 注册gc对象
+     */
     override fun registerGcable(obj: LuaGcable) {
         gcList.add(obj)
     }
