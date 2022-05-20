@@ -3,6 +3,7 @@ package io.dingyi.androlua_standalone
 import android.os.Bundle
 import androidx.lifecycle.lifecycleScope
 import com.dingyi.androlua_standalone.R
+import com.luajava.LuaFunction
 import io.github.dingyi.androlua.lib.activity.ProxyLuaActivity
 import io.github.dingyi.androlua.vm.LuaGlobal
 import kotlinx.coroutines.Dispatchers
@@ -14,8 +15,6 @@ class MainActivity : ProxyLuaActivity(
     luaDir = LuaGlobal.applicationContext.getExternalFilesDir("test")?.parentFile?.absolutePath.toString()
 ) {
     override fun onCreate(savedInstanceState: Bundle?) {
-        super.onCreate(savedInstanceState)
-        setContentView(R.layout.activity_main)
 
 
         //Un Assets File
@@ -45,7 +44,9 @@ class MainActivity : ProxyLuaActivity(
             }
 
 
-            val func1  = requireLuaVM()
+            runOnCreate(savedInstanceState)
+
+            val func1 = requireLuaVM()
                 .get("print")
 
             val func2 = requireLuaVM()
@@ -55,6 +56,9 @@ class MainActivity : ProxyLuaActivity(
             println(func2)
 
         }
+
+        super.onCreate(savedInstanceState)
+        setContentView(R.layout.activity_main)
 
     }
 

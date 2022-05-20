@@ -1,6 +1,7 @@
 package io.github.dingyi.androlua.lib.func
 
 
+import android.util.Log
 import io.github.dingyi.androlua.vm.LuaContext
 import com.luajava.JavaFunction
 import io.github.dingyi.androlua.vm.LuaVM

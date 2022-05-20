@@ -2,6 +2,8 @@ package io.github.dingyi.androlua.vm
 
 import android.app.Activity
 import android.app.ActivityManager
+import android.content.Context
+import android.util.Log
 import android.widget.Toast
 import com.androlua.LuaGcable
 import io.github.dingyi.androlua.lib.func.LuaPrint
@@ -17,7 +19,7 @@ import java.lang.ref.WeakReference
  */
 class LuaActivityVM(
     private val luaDir: String
-) : LuaVM.VMMessageListener, LuaVM by LuaGlobal {
+) : LuaVM.VMMessageListener, LuaVM() {
 
     private var initActivity: WeakReference<Activity> = WeakReference(null)
     private val luaState = LuaStateFactory.newLuaState()
@@ -29,6 +31,27 @@ class LuaActivityVM(
     override fun getLuaState(): LuaState {
         return luaState
     }
+
+    override fun getSharedData(): Any {
+        return LuaGlobal.sharedData
+    }
+
+    override fun getSharedData(p0: String?): Any? {
+        return LuaGlobal.getSharedData(p0)
+    }
+
+    override fun getSharedData(p0: String?, p1: Any?): Any? {
+        return LuaGlobal.getSharedData(p0, p1)
+    }
+
+    override fun getWidth(): Int {
+        return LuaGlobal.width
+    }
+
+    override fun getLuaPath(p0: String?, p1: String?): String {
+        return luaDir + File.separator + p0 + File.separator + p1
+    }
+
 
     override fun getLuaPath(): String? {
         return loadLuaPath
@@ -42,6 +65,7 @@ class LuaActivityVM(
     override fun getLuaPath(path: String): String? {
         return File(getLuaPath(), path).absolutePath
     }
+
 
 
     override fun getLuaDir(): String? {
@@ -62,6 +86,10 @@ class LuaActivityVM(
 
     override fun setLuaExtDir(dir: String?) {
         luaExtDir = dir
+    }
+
+    override fun setSharedData(p0: String?, p1: Any?): Boolean {
+        return LuaGlobal.setSharedData(p0, p1)
     }
 
     override fun getLuaExtPath(path: String?): String? {
@@ -118,6 +146,14 @@ class LuaActivityVM(
 
         throw LuaException(getErrorReason(ok) + ": " + luaState.toString(-1));
 
+    }
+
+    override fun getContext(): Context {
+        return LuaGlobal.context
+    }
+
+    override fun getHeight(): Int {
+        return LuaGlobal.height
     }
 
 
@@ -202,8 +238,11 @@ class LuaActivityVM(
         luaState.pop(1);
 
 
-
         registerMessageListener(this)
+
+        val print = LuaPrint(this)
+        print.register("print")
+
 
         luaDexLoader = LuaDexLoader(this)
 
@@ -211,10 +250,7 @@ class LuaActivityVM(
         luaDexLoader.loadLibs()
 
 
-        val print = LuaPrint(this)
-        print.register("print")
-
-        doFile(getLuaPath().toString())
+        doFile(luaPath.toString())
     }
 
 
@@ -248,14 +284,15 @@ class LuaActivityVM(
     }
 
     override fun onShowMessage(msg: String) {
-        Toast.makeText(LuaGlobal.applicationContext, msg, Toast.LENGTH_SHORT).show()
+        Log.e("Lua", msg)
+        Toast.makeText(initActivity.get() ?: context, msg, Toast.LENGTH_LONG).show()
     }
 
     override fun onShowErrorMessage(title: String, exception: Exception) {
         Toast.makeText(
             LuaGlobal.applicationContext,
             exception.stackTraceToString(),
-            Toast.LENGTH_SHORT
+            Toast.LENGTH_LONG
         ).show()
     }
 

@@ -33,14 +33,18 @@ abstract class ProxyLuaActivity(
         return luaActivityVM
     }
 
-    override fun onCreate(savedInstanceState: Bundle?) {
-        super.onCreate(savedInstanceState)
+    /**
+     * 该方法请在适当的时候在onCreate中调用
+     */
+    fun runOnCreate(savedInstanceState: Bundle?) {
         if (createLuaVM) {
             createLuaVM()
             requireLuaVM().init(this, getRunLuaPath())
         }
         getLuaVM()?.runFunc("onCreate", savedInstanceState)
     }
+
+
 
     /**
      * 获取运行的lua路径，默认为main.lua

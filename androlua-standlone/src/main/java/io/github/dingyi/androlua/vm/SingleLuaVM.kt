@@ -1,9 +1,11 @@
 package io.github.dingyi.androlua.vm
 
+import android.content.Context
 import com.luajava.LuaException
 import com.luajava.LuaState
 import com.luajava.LuaStateFactory
 import io.github.dingyi.androlua.lib.func.LuaPrint
+import io.github.dingyi.androlua.loader.LuaDexLoader
 import java.io.File
 
 /**
@@ -11,7 +13,7 @@ import java.io.File
  */
 
 class SingleLuaVM(
-) : LuaVM by LuaGlobal {
+) :LuaVM() {
 
     private val luaState = LuaStateFactory.newLuaState()
 
@@ -21,6 +23,28 @@ class SingleLuaVM(
     override fun getLuaState(): LuaState {
         return luaState
     }
+
+
+    override fun getSharedData(): Any {
+        return LuaGlobal.sharedData
+    }
+
+    override fun getSharedData(p0: String?): Any? {
+        return LuaGlobal.getSharedData(p0)
+    }
+
+    override fun getSharedData(p0: String?, p1: Any?): Any? {
+        return LuaGlobal.getSharedData(p0, p1)
+    }
+
+    override fun getWidth(): Int {
+        return LuaGlobal.width
+    }
+
+    override fun getLuaPath(p0: String?, p1: String?): String {
+        return luaDir + File.separator + p0 + File.separator + p1
+    }
+
 
     override fun getLuaPath(): String? {
         return loadLuaPath
@@ -34,7 +58,6 @@ class SingleLuaVM(
     override fun getLuaPath(path: String): String? {
         return File(luaPath, path).absolutePath
     }
-
 
 
     override fun get(key: String): Any? {
@@ -62,6 +85,10 @@ class SingleLuaVM(
 
     override fun setLuaExtDir(dir: String?) {
         luaExtDir = dir
+    }
+
+    override fun setSharedData(p0: String?, p1: Any?): Boolean {
+        return LuaGlobal.setSharedData(p0, p1)
     }
 
     override fun getLuaExtPath(path: String?): String? {
@@ -118,6 +145,14 @@ class SingleLuaVM(
 
     }
 
+    override fun getContext(): Context {
+        return LuaGlobal.context
+    }
+
+    override fun getHeight(): Int {
+        return LuaGlobal.height
+    }
+
 
     override fun doString(funcSrc: String, vararg args: Any?): Any? {
 
@@ -140,6 +175,10 @@ class SingleLuaVM(
 
         throw LuaException(getErrorReason(ok).toString() + ": " + luaState.toString(-1))
 
+    }
+
+    override fun getLuaDexLoader(): LuaDexLoader? {
+        return null
     }
 
     override fun init() {

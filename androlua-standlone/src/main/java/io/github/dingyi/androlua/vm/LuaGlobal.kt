@@ -13,7 +13,7 @@ import io.github.dingyi.androlua.loader.LuaDexLoader
 import java.io.File
 
 
-object LuaGlobal : LuaVM {
+object LuaGlobal : LuaVM() {
 
 
     lateinit var libDir: String

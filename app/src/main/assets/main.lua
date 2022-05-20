@@ -6,16 +6,7 @@
 
 
 local Log = luajava.bindClass "android.util.Log"
-
-function print(...)
-    local buf = {}
-    for n = 1, select("#", ...) do
-        table.insert(buf, tostring(select(n, ...)))
-    end
-    local msg = table.concat(buf, "\t\t")
-    Log.d("lua",tostring(luajava.getContext()))
-    luajava.getContext().sendMsg(msg)
-end
+local Toast = luajava.bindClass "android.widget.Toast"
 
 function onCreate()
     Log.d("lua","onCreate")
