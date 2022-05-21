@@ -50,7 +50,7 @@ abstract class ProxyLuaActivity(
      * 获取运行的lua路径，默认为main.lua
      * 在onCreate后面调用
      */
-    protected fun getRunLuaPath() = "main.lua"
+    protected open fun getRunLuaPath() = "main.lua"
 
     override fun onStart() {
         super.onStart()
