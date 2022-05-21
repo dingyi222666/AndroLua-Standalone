@@ -55,18 +55,27 @@ LuaActivityVM 是 类似于AndroLua+ LuaActivity的 一类 VM对象，可以传�
 目前只推荐通过继承ProxyActivity来使用该类型的VM
 
 以下代码就继承了ProxyLuaActivity,并且指定了默认的运行lua路径
+
 ```kotlin
+//import zip4j
+import net.lingala.zip4j.ZipFile
+
 class MainActivity : ProxyLuaActivity(
     luaDir = LuaGlobal.applicationContext.getExternalFilesDir("test")?.parentFile?.absolutePath.toString()
 )
 ```
 
-接下来你可以覆盖getRunLuaPath方法 返回运行的lua文件的路径
-如果文件不为绝对路径，那么久采用相对路径，即luadir+路径
+> 覆盖获取Lua运行路径方法
+
+接下来你可以覆盖getRunLuaPath方法 返回运行的lua文件的路径 如果文件不为绝对路径，那么久采用相对路径，即luadir+路径 该方法仅会在runOnCreate时调用
 
 ```kotlin
- override fun getRunLuaPath():String { return  "main.lua" }
+ override fun getRunLuaPath(): String {
+    return "main.lua"
+}
 ```
+
+> 覆盖onCreate方法
 
 然后覆盖onCreate方法 实现你的解压lua文件逻辑
 
@@ -75,40 +84,38 @@ class MainActivity : ProxyLuaActivity(
 ```kotlin
  override fun onCreate(savedInstanceState: Bundle?) {
 
+    super.onCreate(savedInstanceState)
+    setContentView(R.layout.activity_main)
 
-        //Un Assets File
-        val assetsPath = getExternalFilesDir("test")?.parentFile?.absolutePath.toString()
 
-        // get apk path
-        val apkPath = this.packageResourcePath
+    //Un Assets File
+    val assetsPath = getExternalFilesDir("test")?.parentFile?.absolutePath.toString()
 
-        //create and use apk
-        lifecycleScope.launch {
+    // get apk path
+    val apkPath = this.packageResourcePath
 
-            //run on io thread
-            withContext(Dispatchers.IO) {
-                ZipFile(apkPath).use { apkFile ->
-                    apkFile
-                        .fileHeaders
-                        .filter { it.fileName.startsWith("assets/") && it.isDirectory.not() }
-                        .forEach {
-                            apkFile
-                                .extractFile(
-                                    it,
-                                    assetsPath,
-                                    it.fileName.substring("assets/".length)
-                                )
-                        }
-                }
+    //create and use apk
+    lifecycleScope.launch {
+        //run on io thread
+        withContext(Dispatchers.IO) {
+            ZipFile(apkPath).use { apkFile ->
+                apkFile
+                    .fileHeaders
+                    .filter { it.fileName.startsWith("assets/") && it.isDirectory.not() }
+                    .forEach {
+                        apkFile
+                            .extractFile(
+                                it,
+                                assetsPath,
+                                it.fileName.substring("assets/".length)
+                            )
+                    }
             }
-            
-            runOnCreate(savedInstanceState)
         }
-
-        super.onCreate(savedInstanceState)
-        setContentView(R.layout.activity_main)
-
+        runOnCreate(savedInstanceState)
     }
+
+}
 ```
 
 
